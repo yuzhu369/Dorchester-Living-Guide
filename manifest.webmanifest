@@ -1,0 +1,18 @@
+{
+  "name": "Living in Dorchester — A Field Guide",
+  "short_name": "Dorchester Guide",
+  "description": "An interactive personal guide to living in Dorchester and exploring Dorset.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f2efe7",
+  "theme_color": "#1f2a2e",
+  "icons": [
+    {
+      "src": "dorchester-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "scope": "./"
+}
