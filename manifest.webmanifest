@@ -1,6 +1,6 @@
 {
-  "name": "Living in Dorchester — A Field Guide",
-  "short_name": "Dorchester Guide",
+  "name": "Living in Dorchester \u2014 Online Guide v15",
+  "short_name": "Dorchester v15",
   "description": "An interactive personal guide to living in Dorchester and exploring Dorset.",
   "start_url": "./index.html",
   "display": "standalone",
