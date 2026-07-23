@@ -1827,8 +1827,9 @@ const g=$('#offline-markers-v15'),box=$('#offline-map-card-v15'),positions={food
 (()=>{
  const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
  const text=n=>(n?.textContent||'').replace(/\s+/g,' ').trim();
- document.documentElement.dataset.guideVersion='17.0';
- document.body.classList.add('v17-reading-mode');
+ document.documentElement.dataset.guideVersion='17.0.2';
+ document.body.classList.remove('v17-reading-mode');
+ document.body.dataset.v17View='home';
  const oldHero=$('.hero'), navbar=$('.navbar');
  const shell=document.createElement('main');shell.className='v17-shell';
  shell.innerHTML=`
@@ -1855,9 +1856,9 @@ const g=$('#offline-markers-v15'),box=$('#offline-map-card-v15'),positions={food
  groups.forEach(([name,ids],i)=>{const d=document.createElement('details');if(i===0)d.open=true;d.innerHTML=`<summary>${name}</summary><div class="v17-dir-links"></div>`;const box=$('.v17-dir-links',d);ids.forEach(id=>{const sec=$('#'+id);if(!sec)return;const title=text($('.section-title',sec)).replace(/^\d+\s*/,'');const b=document.createElement('button');b.innerHTML=`${title}<small>${text($('.eyebrow',sec))}</small>`;b.onclick=()=>openSection(id);box.append(b)});dir.append(d)});
  function remember(id){try{localStorage.setItem('dorchester-v17-last',id)}catch(_){}}
  function openSection(id){const sec=$('#'+id);if(!sec)return;sections.forEach(s=>s.classList.toggle('v17-visible-section',s===sec));showPage('reading');remember(id);requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'auto'}));}
- function showPage(name){$$('.v17-tab-page').forEach(p=>p.classList.toggle('active',p.dataset.v17Page===name));document.body.classList.toggle('v17-reading-mode',name==='reading');if(name!=='reading')sections.forEach(s=>s.classList.remove('v17-visible-section'));$$('.bottom-nav [data-v17-tab]').forEach(x=>x.classList.toggle('v17-active',x.dataset.v17Tab===name));if(name!=='reading')window.scrollTo({top:0,behavior:'auto'});}
+ function showPage(name){document.body.dataset.v17View=name;$$('.v17-tab-page').forEach(p=>p.classList.toggle('active',p.dataset.v17Page===name));document.body.classList.toggle('v17-reading-mode',name==='reading');if(name!=='reading')sections.forEach(s=>s.classList.remove('v17-visible-section'));$$('.bottom-nav [data-v17-tab]').forEach(x=>x.classList.toggle('v17-active',x.dataset.v17Tab===name));if(name!=='reading')window.scrollTo({top:0,behavior:'auto'});}
  // In reading mode only the selected section is shown; in app pages all legacy sections stay hidden.
- const style=document.createElement('style');style.textContent=`body:not(.v17-reading-mode) .section,body:not(.v17-reading-mode) .phase-tools,body:not(.v17-reading-mode) footer{display:none!important} body.v17-reading-mode .v17-shell{display:none}`;document.head.append(style);
+ const style=document.createElement('style');style.textContent=`body[data-v17-view]:not([data-v17-view=reading]) .section,body[data-v17-view]:not([data-v17-view=reading]) .phase-tools,body[data-v17-view]:not([data-v17-view=reading]) footer{display:none!important} body[data-v17-view=reading] .v17-shell{display:none!important} body[data-v17-view]:not([data-v17-view=reading]) .v12-launcher,body[data-v17-view]:not([data-v17-view=reading]) .v16-sections-button,body[data-v17-view]:not([data-v17-view=reading]) .photo-setup{display:none!important}`;document.head.append(style);
  $$('[data-v17-jump]').forEach(b=>b.onclick=()=>openSection(b.dataset.v17Jump));$$('[data-v17-action="explore"]').forEach(b=>b.onclick=()=>showPage('explore'));
  const last=(()=>{try{return localStorage.getItem('dorchester-v17-last')}catch(_){return null}})();
  if(last&&$('#'+last)){const title=text($('.section-title',$('#'+last))).replace(/^\d+\s*/,'');$('#v17-resume-title').textContent=title;$('#v17-resume-copy').textContent='Carry on from the last section you opened.';$('#v17-resume-btn').onclick=()=>openSection(last)}else $('#v17-resume-btn').onclick=()=>showPage('explore');
@@ -1882,6 +1883,115 @@ const g=$('#offline-markers-v15'),box=$('#offline-map-card-v15'),positions={food
  // legacy floating section button returns to Explore directory in v17
  const secBtn=$('.v16-sections-button');if(secBtn){secBtn.textContent='Explore sections';secBtn.onclick=()=>showPage('explore')}
  document.addEventListener('keydown',e=>{if(e.key==='Escape')closePlace()});
+ const badge=document.createElement('span');badge.id='v17-build-badge';badge.textContent='v17.0.3';badge.style.cssText='position:fixed;top:12px;right:12px;z-index:6000;font:700 10px system-ui;background:#b4763a;color:white;padding:4px 7px;border-radius:999px';document.body.append(badge);
+ showPage('home');
+ setTimeout(()=>{if(document.body.dataset.v17View!=='reading')showPage(document.body.dataset.v17View||'home')},250);
+})();
+</script>
+
+<style id="v17-0-3-contrast-food-fixes">
+/* v17.0.3 — dark-mode contrast and food-category structure */
+@media (prefers-color-scheme: dark){
+  :root{
+    --ink:#edf3f0;
+    --ink-soft:#c0cbc7;
+    --paper:#223034;
+    --stone:#172124;
+    --line:#455559;
+    --line-2:#39494d;
+  }
+  .section,.section p,.section li,.section td,.section .note,.section .intro,
+  .place,.place-content,.place-name,.place-name a,.place-desc,
+  .trip,.trip-name,.trip-name a,.trip-desc,.tm,
+  .place-hours summary,.place-hours-list b,.editor-note,
+  .v17-food-category-head,.v17-food-category-copy{color:#edf3f0!important}
+  .place-desc,.note,.intro,.trip-desc,.mapcap,.place-data-note,
+  .place-hours-list,.v17-food-category-copy{color:#c0cbc7!important}
+  .place-content,.trip,.place-hours,.editor-note{background:#223034!important;border-color:#455559!important}
+  .editor-note{background:#2d3938!important;color:#e7ede9!important}
+  .place-actions{border-color:#455559!important}
+  .card-btn,.place-actions a.card-btn{background:#f6f4ee!important;color:#1e2b2e!important;border-color:#d9dedb!important}
+  .place-actions .primary-action,.card-btn.primary-action{background:#132328!important;color:#fff!important;border-color:#132328!important}
+  .chip,.place-tag,.live-pill{filter:none!important}
+  .subhead{color:#f2f5f3!important}
+}
+.v17-food-tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 0 16px;margin:0 0 10px;scrollbar-width:none;position:sticky;top:58px;z-index:15;background:var(--stone)}
+.v17-food-tabs::-webkit-scrollbar{display:none}
+.v17-food-tab{flex:0 0 auto;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:9px 13px;font:700 .75rem "Public Sans",sans-serif;cursor:pointer}
+.v17-food-tab.active{background:var(--sea);border-color:var(--sea);color:#fff}
+.v17-food-category{margin:26px 0 40px;scroll-margin-top:118px}
+.v17-food-category-head{font-size:1.55rem;margin:0 0 4px;padding-left:15px;position:relative}
+.v17-food-category-head:before{content:"";position:absolute;left:0;top:.15em;bottom:.15em;width:4px;background:var(--ochre);border-radius:3px}
+.v17-food-category-copy{margin:0 0 15px;color:var(--ink-soft);font-size:.9rem}
+.v17-food-category .places{margin-top:0}
+.v17-food-original-head{display:none!important}
+@media(max-width:700px){.v17-food-tabs{top:54px;margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px}.v17-food-category{margin-top:20px}}
+</style>
+
+<script id="v17-0-3-food-categories">
+(() => {
+  const food = document.getElementById('food');
+  if (!food || food.dataset.v17Categorised === 'true') return;
+  food.dataset.v17Categorised = 'true';
+
+  const categories = [
+    {id:'food-asian', label:'Asian', copy:'Thai, Indian, Nepalese and South Indian options around town.', keys:['king and thai','kao san','jaipur','curriocity','everest','sundorbon']},
+    {id:'food-european', label:'European & Mediterranean', copy:'Italian, French, Turkish and Portuguese restaurants.', keys:['meram','o\'pasta','côte','cote','santos','al molo']},
+    {id:'food-casual', label:'Casual, brunch & coffee', copy:'Easy breakfasts, coffee, burgers and relaxed all-day places.', keys:['vivo lounge','dorchester bites','finca','pickle jar','secret garden','walnut grove']},
+    {id:'food-special', label:'Fine dining & special occasions', copy:'Tasting menus, destination meals and celebratory restaurants.', keys:['seventy four','square bistro','catch at the old fish market','parnham','summer lodge']},
+    {id:'food-pubs', label:'Pubs & country inns', copy:'Town pubs, micropubs, Sunday roasts and destination country inns.', keys:['copper street','convivial rabbit','blue raddle','tom brown','goldies','brewhouse & kitchen','sun inn','brewers arms','thimble inn','trumpet major']},
+    {id:'food-bars', label:'Cocktails, wine & nightlife', copy:'Cocktail bars, wine, live music and late-night Weymouth options.', keys:['xo','dorset wine company','crossroads','corn exchange','weymouth pavilion','closet bar','popworld','nook cocktail','black dog']}
+  ];
+
+  const cards = [...food.querySelectorAll('article.place')];
+  const intro = food.querySelector('.section-head');
+  const oldHeads = [...food.querySelectorAll(':scope > .subhead')];
+  oldHeads.forEach(h => h.classList.add('v17-food-original-head'));
+  [...food.children].forEach(el => {
+    if (el.classList?.contains('places') && el.querySelector('article.place')) el.remove();
+    if (el.classList?.contains('note') && el.previousElementSibling?.classList?.contains('v17-food-original-head')) el.remove();
+  });
+
+  const tabs = document.createElement('nav');
+  tabs.className = 'v17-food-tabs';
+  tabs.setAttribute('aria-label','Food and drink categories');
+  intro.insertAdjacentElement('afterend', tabs);
+
+  const used = new Set();
+  categories.forEach((cat, idx) => {
+    const wrap = document.createElement('section');
+    wrap.className = 'v17-food-category';
+    wrap.id = cat.id;
+    wrap.innerHTML = `<h3 class="v17-food-category-head">${cat.label}</h3><p class="v17-food-category-copy">${cat.copy}</p><div class="places"></div>`;
+    const grid = wrap.querySelector('.places');
+    cards.forEach(card => {
+      const name=(card.querySelector('.place-name')?.textContent||'').toLowerCase();
+      if (!used.has(card) && cat.keys.some(k => name.includes(k))) { grid.append(card); used.add(card); }
+    });
+    if (grid.children.length) {
+      food.append(wrap);
+      const btn=document.createElement('button');
+      btn.className='v17-food-tab'+(idx===0?' active':'');
+      btn.textContent=cat.label;
+      btn.onclick=()=>{document.getElementById(cat.id)?.scrollIntoView({behavior:'smooth',block:'start'});};
+      tabs.append(btn);
+    }
+  });
+
+  const leftovers=cards.filter(c=>!used.has(c));
+  if(leftovers.length){
+    const wrap=document.createElement('section');wrap.className='v17-food-category';wrap.id='food-other';
+    wrap.innerHTML='<h3 class="v17-food-category-head">Other favourites</h3><p class="v17-food-category-copy">Additional food and drink recommendations.</p><div class="places"></div>';
+    leftovers.forEach(c=>wrap.querySelector('.places').append(c));food.append(wrap);
+    const btn=document.createElement('button');btn.className='v17-food-tab';btn.textContent='Other';btn.onclick=()=>wrap.scrollIntoView({behavior:'smooth',block:'start'});tabs.append(btn);
+  }
+
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{if(entry.isIntersecting){
+      [...tabs.children].forEach(b=>b.classList.toggle('active', b.textContent === entry.target.querySelector('h3')?.textContent));
+    }});
+  },{rootMargin:'-25% 0px -65% 0px',threshold:0});
+  food.querySelectorAll('.v17-food-category').forEach(s=>observer.observe(s));
 })();
 </script>
 </body>
