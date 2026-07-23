@@ -1,4 +1,4 @@
-const CACHE='dorchester-guide-v15-online';
+const CACHE='dorchester-guide-v17-0';
 const APP='./index.html';
 const CORE=['./',APP,'./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));

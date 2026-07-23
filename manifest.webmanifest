@@ -1,14 +1,14 @@
 {
-  "name": "Living in Dorchester \u2014 Online Guide v15",
-  "short_name": "Dorchester v15",
-  "description": "An interactive personal guide to living in Dorchester and exploring Dorset.",
+  "name": "Living in Dorchester \u2014 Mobile Guide v17",
+  "short_name": "Dorchester v17",
+  "description": "A mobile-first personal guide to living in Dorchester and exploring Dorset.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f2efe7",
+  "background_color": "#f4f1ea",
   "theme_color": "#1f2a2e",
   "icons": [
     {
-      "src": "dorchester-icon.svg",
+      "src": "icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
