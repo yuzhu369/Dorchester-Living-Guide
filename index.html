@@ -286,7 +286,7 @@ body{overflow-x:hidden;padding-bottom:92px}
 @media(max-width:480px){.trip{padding:16px}.trip-name{font-size:1.16rem}.band{font-size:.95rem}.v16-section-link.subsection{margin-left:8px}}
 </style>
 <style id="v17-mobile-app-styles">
-/* v17.0 — focused mobile app shell */
+/* v17.0.1 — app shell visibility fix */
 :root{--v17-safe:env(safe-area-inset-bottom,0px);--v17-card:#fff;--v17-shadow:0 14px 38px rgba(24,38,42,.10)}
 body{padding-bottom:calc(82px + var(--v17-safe));background:#f4f1ea}
 .navbar{position:fixed;inset:0 0 auto 0;background:rgba(244,241,234,.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(31,42,46,.09)}
@@ -1855,7 +1855,7 @@ const g=$('#offline-markers-v15'),box=$('#offline-map-card-v15'),positions={food
  groups.forEach(([name,ids],i)=>{const d=document.createElement('details');if(i===0)d.open=true;d.innerHTML=`<summary>${name}</summary><div class="v17-dir-links"></div>`;const box=$('.v17-dir-links',d);ids.forEach(id=>{const sec=$('#'+id);if(!sec)return;const title=text($('.section-title',sec)).replace(/^\d+\s*/,'');const b=document.createElement('button');b.innerHTML=`${title}<small>${text($('.eyebrow',sec))}</small>`;b.onclick=()=>openSection(id);box.append(b)});dir.append(d)});
  function remember(id){try{localStorage.setItem('dorchester-v17-last',id)}catch(_){}}
  function openSection(id){const sec=$('#'+id);if(!sec)return;sections.forEach(s=>s.classList.toggle('v17-visible-section',s===sec));showPage('reading');remember(id);requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'auto'}));}
- function showPage(name){$$('.v17-tab-page').forEach(p=>p.classList.toggle('active',p.dataset.v17Page===name));document.body.classList.toggle('v17-reading-mode',name!=='reading');if(name==='reading')document.body.classList.add('v17-reading-mode');else sections.forEach(s=>s.classList.remove('v17-visible-section'));$$('.bottom-nav [data-v17-tab]').forEach(x=>x.classList.toggle('v17-active',x.dataset.v17Tab===name));if(name!=='reading')window.scrollTo({top:0,behavior:'auto'});}
+ function showPage(name){$$('.v17-tab-page').forEach(p=>p.classList.toggle('active',p.dataset.v17Page===name));document.body.classList.toggle('v17-reading-mode',name==='reading');if(name!=='reading')sections.forEach(s=>s.classList.remove('v17-visible-section'));$$('.bottom-nav [data-v17-tab]').forEach(x=>x.classList.toggle('v17-active',x.dataset.v17Tab===name));if(name!=='reading')window.scrollTo({top:0,behavior:'auto'});}
  // In reading mode only the selected section is shown; in app pages all legacy sections stay hidden.
  const style=document.createElement('style');style.textContent=`body:not(.v17-reading-mode) .section,body:not(.v17-reading-mode) .phase-tools,body:not(.v17-reading-mode) footer{display:none!important} body.v17-reading-mode .v17-shell{display:none}`;document.head.append(style);
  $$('[data-v17-jump]').forEach(b=>b.onclick=()=>openSection(b.dataset.v17Jump));$$('[data-v17-action="explore"]').forEach(b=>b.onclick=()=>showPage('explore'));
